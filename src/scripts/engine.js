@@ -84,7 +84,6 @@ function adicionarOuvirCaixa() {
       if (quadrado.id === estado.valores.posicaoAcerto) {
         estado.valores.resultado++;
         estado.view.pontuacao.textContent = estado.valores.resultado;
-        estado.valores.posicaoAcerto = null;
         estado.valores.clicouCorretamente = true; // Marca que o jogador clicou corretamente
         tocarSom("src_audios_hit");
 
@@ -111,6 +110,10 @@ function finalizarJogo(mensagem) {
 }
 
 function reiniciarJogo() {
+  // Para todos os temporizadores ativos antes de reiniciar o jogo
+  clearInterval(estado.acoes.idContagemRegressiva);
+  clearInterval(estado.acoes.idTimer);
+
   // Redefine os valores iniciais
   estado.valores.tempoAtual = 60;
   estado.valores.vidas = 3;
@@ -128,6 +131,20 @@ function reiniciarJogo() {
   // Reinicia os temporizadores
   estado.acoes.idTimer = setInterval(quadradoAleatorio, estado.valores.velocidadeJogo);
   estado.acoes.idContagemRegressiva = setInterval(contagemRegressiva, 1000);
+
+  // Chama quadradoAleatorio para garantir que o inimigo esteja visível imediatamente
+  quadradoAleatorio();
+}
+
+function finalizarJogo(mensagem) {
+  clearInterval(estado.acoes.idContagemRegressiva);
+  clearInterval(estado.acoes.idTimer);
+  alert(mensagem + estado.valores.resultado);
+
+  if (confirm("Deseja jogar novamente?")) {
+    // Reinicia a página ao invés de apenas resetar o jogo
+    location.reload();
+  }
 }
 
 function iniciar() {
@@ -136,3 +153,4 @@ function iniciar() {
 }
 
 iniciar();
+
