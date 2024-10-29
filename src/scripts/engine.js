@@ -8,12 +8,15 @@ const estado = {
     vidas: document.querySelector(".menu-vidas h2:last-of-type"),
   },
   valores: {
-    velocidadeJogo: 1000,
+    velocidadeJogo: 1500, // Tempo atualizado para 1.5 segundos
     posicaoAcerto: 0,
+    posicaoAnterior: null,
     resultado: 0,
     tempoAtual: 60,
     vidas: 3,
     highScore: 0,
+    clicouCorretamente: false, // Variável para verificar se o jogador clicou corretamente
+    primeiraMovimentacao: true, // Nova variável para verificar se é a primeira movimentação
   },
   acoes: {
     idTimer: null,
@@ -41,10 +44,29 @@ function quadradoAleatorio() {
     quadrado.classList.remove("enemy");
   });
 
-  const numeroAleatorio = Math.floor(Math.random() * 9);
+  let numeroAleatorio;
+
+  // Gera um número aleatório diferente do anterior
+  do {
+    numeroAleatorio = Math.floor(Math.random() * 9);
+  } while (numeroAleatorio === estado.valores.posicaoAnterior);
+
+  // Atualiza o quadrado e a posição anterior
   const quadradoAleatorio = estado.view.quadrados[numeroAleatorio];
   quadradoAleatorio.classList.add("enemy");
   estado.valores.posicaoAcerto = quadradoAleatorio.id;
+  estado.valores.posicaoAnterior = numeroAleatorio;
+
+  // Verifica se não é a primeira movimentação e se o jogador não clicou corretamente
+  if (!estado.valores.primeiraMovimentacao && !estado.valores.clicouCorretamente) {
+    perderVida();
+  }
+
+  // A partir da primeira movimentação, a variável `primeiraMovimentacao` será falsa
+  estado.valores.primeiraMovimentacao = false;
+
+  // Reseta a variável de clique correto para a próxima posição
+  estado.valores.clicouCorretamente = false;
 }
 
 function perderVida() {
@@ -63,9 +85,10 @@ function adicionarOuvirCaixa() {
         estado.valores.resultado++;
         estado.view.pontuacao.textContent = estado.valores.resultado;
         estado.valores.posicaoAcerto = null;
+        estado.valores.clicouCorretamente = true; // Marca que o jogador clicou corretamente
         tocarSom("src_audios_hit");
 
-        // Atualiza o high score se o resultado atual for maior
+        // Atualiza o high score se necessário
         if (estado.valores.resultado > estado.valores.highScore) {
           estado.valores.highScore = estado.valores.resultado;
           estado.view.highScore.textContent = estado.valores.highScore;
@@ -93,12 +116,14 @@ function reiniciarJogo() {
   estado.valores.vidas = 3;
   estado.valores.resultado = 0;
   estado.valores.posicaoAcerto = null;
+  estado.valores.posicaoAnterior = null;
+  estado.valores.clicouCorretamente = false;
+  estado.valores.primeiraMovimentacao = true; // Reseta para que a primeira movimentação não cause perda de vida
 
   // Atualiza a interface
   estado.view.tempoRestante.textContent = estado.valores.tempoAtual;
   estado.view.pontuacao.textContent = estado.valores.resultado;
   estado.view.vidas.textContent = "x" + estado.valores.vidas;
-  estado.view.highScore.textContent = estado.valores.highScore;
 
   // Reinicia os temporizadores
   estado.acoes.idTimer = setInterval(quadradoAleatorio, estado.valores.velocidadeJogo);
