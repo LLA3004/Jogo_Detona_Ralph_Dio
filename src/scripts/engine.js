@@ -81,6 +81,11 @@ function perderVida() {
 function adicionarOuvirCaixa() {
   estado.view.quadrados.forEach((quadrado) => {
     quadrado.addEventListener("mousedown", () => {
+      // Verifica se o jogador não tem vidas restantes
+      if (estado.valores.vidas <= 0) {
+        return; // Ignora cliques se não houver vidas
+      }
+
       if (quadrado.id === estado.valores.posicaoAcerto) {
         estado.valores.resultado++;
         estado.view.pontuacao.textContent = estado.valores.resultado;
@@ -98,6 +103,7 @@ function adicionarOuvirCaixa() {
     });
   });
 }
+
 
 function finalizarJogo(mensagem) {
   clearInterval(estado.acoes.idContagemRegressiva);
