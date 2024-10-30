@@ -65,9 +65,11 @@ function quadradoAleatorio() {
 
 function perderVida() {
   estado.valores.vidas--;
+  tocarSom("hit")
   estado.view.vidas.textContent = "x" + estado.valores.vidas;
 
-  if (estado.valores.vidas <= 0) {
+  if (estado.valores.vidas < 0) {
+    tocarSom("gameover")
     finalizarJogo("Game Over! Você perdeu todas as vidas. O seu resultado foi: ");
   }
 }
@@ -131,7 +133,7 @@ function mostrarMensagemInicio() {
   const iniciar = confirm("Bem-vindo! Clique em 'OK' para iniciar o jogo.");
   if (iniciar) {
     iniciarJogo();
-    
+
   }
 }
 
