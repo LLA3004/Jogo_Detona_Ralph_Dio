@@ -23,8 +23,12 @@
     display: flex;
     justify-content: center;
 
+    
+
+
     align-items: center;
     background-image: url();
+
 
 }
 
@@ -56,29 +60,4 @@
     align-items: center;
     justify-content: center;
     color: #ffff00;
-}
-/* Estilos para dispositivos móveis */
-@media (max-width: 768px) {
-    .container {
-        height: auto; /* Ajusta a altura para permitir rolagem, se necessário */
-    }
-
-    .menu {
-        flex-direction: column; /* Ajusta o menu para exibição em coluna */
-        height: auto;
-        padding: 10px;
-    }
-
-    .menu-vidas img {
-        height: 40px; /* Diminui a imagem do jogador para ajustar melhor no mobile */
-    }
-
-    .panel {
-        flex-direction: column; /* Empilha as linhas do painel em colunas no mobile */
-    }
-
-    .square {
-        width: 80px; /* Reduz o tamanho dos quadrados */
-        height: 80px;
-    }
 }
