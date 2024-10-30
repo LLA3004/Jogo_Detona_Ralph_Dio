@@ -8,15 +8,15 @@ const estado = {
     vidas: document.querySelector(".menu-vidas h2:last-of-type"),
   },
   valores: {
-    velocidadeJogo: 1500, // Tempo atualizado para 1.5 segundos
+    velocidadeJogo: 1500,
     posicaoAcerto: 0,
     posicaoAnterior: null,
     resultado: 0,
     tempoAtual: 60,
     vidas: 3,
     highScore: 0,
-    clicouCorretamente: false, // Variável para verificar se o jogador clicou corretamente
-    primeiraMovimentacao: true, // Nova variável para verificar se é a primeira movimentação
+    clicouCorretamente: false,
+    primeiraMovimentacao: true,
   },
   acoes: {
     idTimer: null,
@@ -46,34 +46,30 @@ function quadradoAleatorio() {
 
   let numeroAleatorio;
 
-  // Gera um número aleatório diferente do anterior
   do {
     numeroAleatorio = Math.floor(Math.random() * 9);
   } while (numeroAleatorio === estado.valores.posicaoAnterior);
 
-  // Atualiza o quadrado e a posição anterior
   const quadradoAleatorio = estado.view.quadrados[numeroAleatorio];
   quadradoAleatorio.classList.add("enemy");
   estado.valores.posicaoAcerto = quadradoAleatorio.id;
   estado.valores.posicaoAnterior = numeroAleatorio;
 
-  // Verifica se não é a primeira movimentação e se o jogador não clicou corretamente
   if (!estado.valores.primeiraMovimentacao && !estado.valores.clicouCorretamente) {
     perderVida();
   }
 
-  // A partir da primeira movimentação, a variável `primeiraMovimentacao` será falsa
   estado.valores.primeiraMovimentacao = false;
-
-  // Reseta a variável de clique correto para a próxima posição
   estado.valores.clicouCorretamente = false;
 }
 
 function perderVida() {
   estado.valores.vidas--;
+  tocarSom("hit")
   estado.view.vidas.textContent = "x" + estado.valores.vidas;
 
-  if (estado.valores.vidas <= 0) {
+  if (estado.valores.vidas < 0) {
+    tocarSom("gameover")
     finalizarJogo("Game Over! Você perdeu todas as vidas. O seu resultado foi: ");
   }
 }
@@ -81,18 +77,16 @@ function perderVida() {
 function adicionarOuvirCaixa() {
   estado.view.quadrados.forEach((quadrado) => {
     quadrado.addEventListener("mousedown", () => {
-      // Verifica se o jogador não tem vidas restantes
       if (estado.valores.vidas <= 0) {
-        return; // Ignora cliques se não houver vidas
+        return;
       }
 
       if (quadrado.id === estado.valores.posicaoAcerto) {
         estado.valores.resultado++;
         estado.view.pontuacao.textContent = estado.valores.resultado;
-        estado.valores.clicouCorretamente = true; // Marca que o jogador clicou corretamente
+        estado.valores.clicouCorretamente = true;
         tocarSom("src_audios_hit");
 
-        // Atualiza o high score se necessário
         if (estado.valores.resultado > estado.valores.highScore) {
           estado.valores.highScore = estado.valores.resultado;
           estado.view.highScore.textContent = estado.valores.highScore;
@@ -104,59 +98,49 @@ function adicionarOuvirCaixa() {
   });
 }
 
-
 function finalizarJogo(mensagem) {
   clearInterval(estado.acoes.idContagemRegressiva);
   clearInterval(estado.acoes.idTimer);
   alert(mensagem + estado.valores.resultado);
 
   if (confirm("Deseja jogar novamente?")) {
-    reiniciarJogo();
+    location.reload();
   }
 }
 
 function reiniciarJogo() {
-  // Para todos os temporizadores ativos antes de reiniciar o jogo
   clearInterval(estado.acoes.idContagemRegressiva);
   clearInterval(estado.acoes.idTimer);
 
-  // Redefine os valores iniciais
   estado.valores.tempoAtual = 60;
   estado.valores.vidas = 3;
   estado.valores.resultado = 0;
   estado.valores.posicaoAcerto = null;
   estado.valores.posicaoAnterior = null;
   estado.valores.clicouCorretamente = false;
-  estado.valores.primeiraMovimentacao = true; // Reseta para que a primeira movimentação não cause perda de vida
+  estado.valores.primeiraMovimentacao = true;
 
-  // Atualiza a interface
   estado.view.tempoRestante.textContent = estado.valores.tempoAtual;
   estado.view.pontuacao.textContent = estado.valores.resultado;
   estado.view.vidas.textContent = "x" + estado.valores.vidas;
 
-  // Reinicia os temporizadores
   estado.acoes.idTimer = setInterval(quadradoAleatorio, estado.valores.velocidadeJogo);
   estado.acoes.idContagemRegressiva = setInterval(contagemRegressiva, 1000);
-
-  // Chama quadradoAleatorio para garantir que o inimigo esteja visível imediatamente
   quadradoAleatorio();
 }
 
-function finalizarJogo(mensagem) {
-  clearInterval(estado.acoes.idContagemRegressiva);
-  clearInterval(estado.acoes.idTimer);
-  alert(mensagem + estado.valores.resultado);
+function mostrarMensagemInicio() {
+  const iniciar = confirm("Bem-vindo! Clique em 'OK' para iniciar o jogo.");
+  if (iniciar) {
+    iniciarJogo();
 
-  if (confirm("Deseja jogar novamente?")) {
-    // Reinicia a página ao invés de apenas resetar o jogo
-    location.reload();
   }
 }
 
-function iniciar() {
+function iniciarJogo() {
   adicionarOuvirCaixa();
   reiniciarJogo();
 }
 
-iniciar();
-
+// Mostra a mensagem inicial antes de começar o jogo
+mostrarMensagemInicio();
