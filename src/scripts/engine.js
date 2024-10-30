@@ -131,6 +131,7 @@ function mostrarMensagemInicio() {
   const iniciar = confirm("Bem-vindo! Clique em 'OK' para iniciar o jogo.");
   if (iniciar) {
     iniciarJogo();
+    
   }
 }
 
