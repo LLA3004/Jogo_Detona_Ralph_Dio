@@ -46,7 +46,13 @@
 .menu-placar h2:nth-child(2) {
     margin-top: 1rem;
 }
-
+.msg{
+    display: flex;
+    
+    align-items: center;
+    justify-content: center;
+    color: #ffff00;
+}
 /* Estilos para dispositivos móveis */
 @media (max-width: 768px) {
     .container {
