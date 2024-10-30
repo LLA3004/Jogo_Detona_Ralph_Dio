@@ -1,59 +1,60 @@
-.container{
+.container {
     display: flex;
     flex-direction: column;
-    height: 100vh;
+    min-height: 100vh; /* Usa a altura total da tela */
     background-image: url("../images/wall.png");
 }
-.menu{
+
+.menu {
     display: flex;
     justify-content: space-evenly;
     align-items: center;
     border-bottom: 5px solid gold;
-    
-
-
     height: 101px;
     width: 100%;
     background-color: #000000;
     color: #ffff00;
-    
-    
 }
 
-.panel{
+.panel {
+    
     margin-top: 1rem;
-    align-items: center;
     display: flex;
     justify-content: center;
+    align-items: center;
     background-image: url();
-    
-
 }
 
-.square{
+.square {
     height: 150px;
     width: 150px;
     border: 1px solid #000000;
-    background-color: #80ca3b;
+    background-color: #d4bc33;
 }
 
-
-.enemy{
+.enemy {
     background-image: url("../images/ralph.png");
     background-size: cover;
-
 }
 
-.menu-vidas{
+.menu-vidas {
     display: flex;
     align-items: center;
     justify-content: center;
-    
 }
 
 .menu-timer h2:nth-child(2),
-.menu-placar h2:nth-child(2){
-
+.menu-placar h2:nth-child(2) {
     margin-top: 1rem;
 }
 
+.msg {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 1rem;
+    background-image: url("../images/wall.png");
+    color: #ffffff;
+    font-size: 1.2rem;
+}
